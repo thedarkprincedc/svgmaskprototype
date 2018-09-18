@@ -1,45 +1,46 @@
 (function(jQuery, window){ 
-    var title = $(".title");
-    var previewWindow = $(".preview-window");
-    var lastSelectedColor = null;
-    function getColorTemplate(node){
-        return `<div class='color-selection'>
-                    <li class="`+ node +` color hide-text">`+ node +`</li>
-                </div>`;
-    }
-    function onSelectionClicked(event){
-        setSelectedColor(event.target.textContent);
-        
-    }
-    function setSelectedColor(colorName){
-      if(lastSelectedColor !== colorName){
-            $(".selected-color").html(colorName);
-            previewWindow.addClass(colorName);
-            $(".preview-window").removeClass(lastSelectedColor)
-            $(".color-is-selected").removeClass("color-is-selected")
-            lastSelectedColor = colorName;
-        }
-    }
-    
-    $.fn.setColorSwatches = function(data, callback){
-        jQuery(".color-swatches").html(
-            `<ul class="textures">` + 
+    var lastSelectedColorName = null;
+    var colorSwatches = {
+        onColorSelected: function(event){
+            if(lastSelectedColorName !== event.target.textContent){
+                jQuery(".selected-color").html(event.target.textContent);
+                jQuery(".preview-window").addClass(event.target.textContent);
+                jQuery(".preview-window").removeClass(lastSelectedColorName);
+                jQuery(".color-is-selected").removeClass("color-is-selected");
+                jQuery(this).addClass("color-is-selected");
+                lastSelectedColorName = event.target.textContent;
+            }
+        },
+        generateColorSwatches: function(data){
+            return `<ul class="textures">` + 
                 data.reduce(function(agg, value){ 
-                    agg += getColorTemplate(value);
+                    agg += `<div class='color-selection'>
+                                <li class="`+ value +` color hide-text">`+ value +`</li>
+                            </div>`
                     return agg;
                 }, "") +
-            `</ul>`)
-        jQuery(".color-selection").click(function(event){
-            onSelectionClicked(event);
-            callback({
-                name: lastSelectedColor
+            `</ul>`;
+        }, init: function(options){
+            options.success.call(this, { name: options.data[0]});
+            jQuery(".preview-window").addClass(options.data[0]);
+            jQuery(jQuery(".color-selection")[0]).addClass("color-is-selected");
+        }
+    };
+    $.fn.initColorSwatches = function(options){
+        var options = options || {};
+        if(options.data){
+            jQuery(".color-swatches").html(colorSwatches.generateColorSwatches(options.data));
+            jQuery(".color-selection").click(function(event){
+                colorSwatches.onColorSelected.call(this, event);
+                options.success.call(this, { name: event.target.textContent });
             });
-            $(this).addClass("color-is-selected");
-        });
-        setSelectedColor(data[0]);
-        $(data[0]).addClass("color-is-selected");
-        callback({
-            name: lastSelectedColor
-        });
+            colorSwatches.init(options);
+        }
+
+        if(options.url){
+            // $.getJSON(options.url, function(response){
+            //     options.success.call(this, { response: response})
+            // });
+        }
     }
 }($, window))
