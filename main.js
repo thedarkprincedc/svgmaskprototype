@@ -7,11 +7,14 @@
         $(this).addClass("color-is-selected");
     }
     function setSelectedColor(colorName){
-        $(".selected-color").html(colorName);
-        previewWindow.addClass(colorName);
-        $(".preview-window").removeClass(lastSelectedColor)
-        $(".color-is-selected").removeClass("color-is-selected")
-        lastSelectedColor = colorName;
+        if(lastSelectedColor !== colorName){
+            $(".selected-color").html(colorName);
+            previewWindow.addClass(colorName);
+            $(".preview-window").removeClass(lastSelectedColor)
+            $(".color-is-selected").removeClass("color-is-selected")
+            lastSelectedColor = colorName;
+        }
+        
     }
 
     $( document ).ready(function() {
