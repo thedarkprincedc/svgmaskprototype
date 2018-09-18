@@ -1,0 +1,45 @@
+.preview-window {
+    width:300px;
+}
+.preview-details {
+
+}
+.preview-details .color-selection{
+    
+}
+.color:hover{
+    width: 100px;
+    height: 100px;
+}
+li.color{
+    display: block;
+    width: 75px;
+    height:75px;
+}
+.preview-details .hide-text{
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+ul.textures{
+    display: inline-block;
+    padding: 0px;
+}
+div.color-selection{
+    display: inline-block; 
+}
+.Red-T09{
+    background-color: red !important;
+}
+.Green-T08{
+    background-color: green !important;
+}
+.Blue-T044{
+    background-color: blue !important;
+}
+.Vien-T044{
+    background-image: url("./images/colors/720x1210px-black-vein.jpg") !important;
+}
+.color-is-selected{
+    border: black 2px solid;
+}
